@@ -1,4 +1,5 @@
 import ctypes
+from collections.abc import Iterable
 
 libmatmul = ctypes.CDLL('./libmatmul.o')
 
@@ -11,12 +12,20 @@ class Matrix(ctypes.Structure):
         ))
     ]
 
-    def __new__(cls, arr):
-        return libmatmul.make_matrix(len(arr), len(arr[0]))
+    def __new__(cls, rows, cols = None):
+        match (rows, cols):
+            case (rows, None) if isinstance(rows, Iterable):
+                return libmatmul.make_matrix(len(rows), len(rows[0]))
+            case (int(), int()):
+                return libmatmul.make_matrix(rows, cols)
 
-    def __init__(self, arr):
-        for i, row in enumerate(arr):
-            self[i] = row
+    def __init__(self, rows, cols = None):
+        match (rows, cols):
+            case (rows, None) if isinstance(rows, Iterable):
+                for i, row in enumerate(rows):
+                    self[i] = row
+            case (int(), int()):
+                pass
 
     def __repr__(self):
         joined_rows = ',\n\t'.join(str(self[i]) for i in range(self.rows))

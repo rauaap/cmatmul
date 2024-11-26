@@ -13,3 +13,6 @@ print(c)
 s = Matrix([[0 for _ in range(10)]])
 s[0] = [i for i in range(10)]
 print(s[0])
+
+f = Matrix(3, 4)
+print(f)
