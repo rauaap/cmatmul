@@ -19,7 +19,8 @@ class Matrix(ctypes.Structure):
             self[i] = row
 
     def __repr__(self):
-        return '\n'.join(str(self[i]) for i in range(self.rows))
+        joined_rows = ',\n\t'.join(str(self[i]) for i in range(self.rows))
+        return '[\n\t' f'{joined_rows}' '\n]'
 
     def __getitem__(self, idx):
         match idx:
